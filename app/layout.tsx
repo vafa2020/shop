@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import Layout from "@/component/layout/Layout";
-
+import "./globals.css"
+import Layout from "../components/layout/Layout";
 const myFont = localFont({
   src: "../font/Vazirmatn-Regular.woff2",
 });
@@ -18,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-      <body className={`${myFont.className} antialiased`}>
+      <body className={`${myFont.className} antialiased bg-gray-100`}>
         <Layout>{children}</Layout>
       </body>
     </html>
