@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
         {productsData.map((product) => (
           <Product key={product.slug} product={product} />
         ))}

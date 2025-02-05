@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import productsData from "../../../data/products.json";
 import { Metadata } from "next";
+import ProductDescription from "@/components/productDescription/ProductDescription";
+import { commafy } from "@/utils/commafy";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -18,40 +20,23 @@ const ProductPage = async ({ params }: Props) => {
   const slug = (await params).slug;
   const product = productsData.find((product) => product.slug === slug);
   return (
-    <div className="flex items-start gap-2">
-      <div className="grid md:grid-cols-3 bg-white shadow-md p-10 rounded-xl md:gap-5">
+    <div className="flex justify-center items-center gap-2">
+    <div className="flex flex-1">
+    <div className="grid md:grid-cols-3 bg-white shadow-md p-10 rounded-xl md:gap-3">
         <div className="col-span-1">
           <img src={product?.image} className="rounded-xl h-72" />
         </div>
-        <div className="flex flex-col justify-between col-span-2">
-          <div className="flex items-center gap-2">
-            <strong>Title:</strong>
-            <p className="text-slate-400">{product?.title}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <strong>Description:</strong>
-            <p className="text-slate-400">{product?.description}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <strong>Category:</strong>
-            <p className="text-slate-400">{product?.cat}</p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <strong>Count:</strong>
-            <p className="text-slate-400">
-              {product?.count}
-              {product?.count! > 0 ? "✅" : "🚫"}
-            </p>
-          </div>
-        </div>
+        <ProductDescription product={product!} />
       </div>
-      <div className="flex flex-col bg-white flex-1 rounded-xl px-2 py-5 gap-5">
+    </div>
+      <div className="flex flex-col justify-between bg-white rounded-xl px-4 py-5 gap-5 w-60 h-40 shadow-md">
         <div className="flex items-center justify-between gap-2">
           <strong>Price</strong>
-          <p className="text-slate-400">{product?.price}</p>
+          <p className="">{commafy(product?.price!)}</p>
         </div>
-        <button className="w-full bg-gray-700 rounded-xl text-white py-2">Add To Cart</button>
+        <button className="w-full bg-green-600 rounded-xl text-white py-2">
+          Add To Cart
+        </button>
       </div>
     </div>
   );

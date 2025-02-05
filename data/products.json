@@ -1,20 +1,22 @@
 [
   {
-    "title": "Book 1",
-    "price": 299,
-    "description": "New Book",
+    "title": "Intermediate",
+    "price": 120000,
+    "description": "EnglishFile Intermadiate",
     "slug": "book-1",
     "image": "/images/book-1.jpg",
     "cat": "Books",
-    "count": 10
+    "count": 10,
+    "color": "green"
   },
   {
-    "title": "Book 2",
-    "price": 500,
-    "description": "New Book 2",
+    "title": "Pro-intermediate",
+    "price": 130000,
+    "description": "EnglishFile Pro-intermadiate",
     "slug": "book-2",
     "image": "/images/book-2.jpg",
     "cat": "Books",
-    "count": 10
+    "count": 0,
+    "color":"blue"
   }
 ]
