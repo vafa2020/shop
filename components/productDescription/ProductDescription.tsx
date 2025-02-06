@@ -1,17 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { BiCheck } from "react-icons/bi";
+import { productType } from "../product/Product";
 
-type PropsComponent = {
-  product: {
-    color: string;
-    title: string;
-    description: string;
-    cat: string;
-    count: number;
-  };
-};
-const ProductDescription = ({ product }: PropsComponent) => {
+const ProductDescription = ({ product }: { product: productType }) => {
   const [color, setColor] = useState(false);
   return (
     <div className="col-span-2">
@@ -31,7 +23,7 @@ const ProductDescription = ({ product }: PropsComponent) => {
             className="inline-flex justify-between items-center w-8 h-8 rounded-full border-2 text-white cursor-pointer pl-1"
             onClick={() => setColor((prev) => !prev)}
           >
-            {color && <BiCheck size="1.5rem"/>}
+            {color && <BiCheck size="1.5rem" />}
           </span>
         </div>
         <div className="flex items-center gap-2">
