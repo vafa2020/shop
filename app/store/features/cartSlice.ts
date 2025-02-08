@@ -18,10 +18,17 @@ const cartSlice = createSlice({
       const findItem = state.cartItems.find(
         (item) => item.slug === action.payload.slug
       );
-      if (findItem) {
-        findItem.qty++;
+      if (!findItem && action.payload.count > 0) {
+        state.cartItems.push({
+          ...action.payload,
+          count: action.payload.count - 1,
+          qty: 1,
+        });
       } else {
-        state.cartItems.push({ ...action.payload, qty: 1 });
+        if (findItem?.count > 0) {
+          findItem.qty++;
+          findItem.count--;
+        }
       }
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
         return (acc = acc + cur.price * cur.qty);
