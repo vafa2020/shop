@@ -15,38 +15,42 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     AddProduct: (state, action: PayloadAction<productType>) => {
-      const findItem = state.cartItems.find(
+      const findProduct = state.cartItems.find(
         (item) => item.slug === action.payload.slug
       );
-      if (!findItem && action.payload.count > 0) {
-        state.cartItems.push({
-          ...action.payload,
-          count: action.payload.count - 1,
-          qty: 1,
-        });
-      } else {
-        if (findItem?.count > 0) {
-          findItem.qty++;
-          findItem.count--;
-        }
-      }
+      const qty: number = findProduct ? findProduct?.qty! + 1 : 1;
+      state.cartItems = findProduct
+        ? state.cartItems.map((product) =>
+            product.title === findProduct.title
+              ? {
+                  ...findProduct,
+                  qty,
+                }
+              : product
+          )
+        : [...state.cartItems, { ...action.payload, qty }];
+
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
-        return (acc = acc + cur.price * cur.qty);
+        return (acc = acc + cur.price * cur?.qty!);
       }, 0);
     },
-    RemoveProduct: (state, action: PayloadAction<productType>) => {
-      const findItem = state.cartItems.find(
-        (item) => item.slug === action.payload.slug
+    RemoveProduct: (state, action: PayloadAction<string>) => {
+      const checkProduct = state.cartItems.find(
+        (product) => product.slug === action.payload
       );
-      if (findItem?.qty > 1) {
-        findItem.qty--;
-      } else {
+      if (checkProduct?.qty === 1) {
         state.cartItems = state.cartItems.filter(
-          (p) => p.slug !== action.payload.slug
+          (product) => product.slug !== action.payload
+        );
+      } else {
+        state.cartItems = state.cartItems.map((product) =>
+          product.slug === action.payload
+            ? { ...product, qty: product.qty! - 1 }
+            : product
         );
       }
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
-        return (acc = acc + cur.price * cur.qty);
+        return (acc = acc + cur.price * cur.qty!);
       }, 0);
     },
   },

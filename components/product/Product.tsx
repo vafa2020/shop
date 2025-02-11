@@ -24,38 +24,34 @@ const Product = ({ product }: { product: productType }) => {
   );
   const dispatch = useAppDispatch();
 
-  const checkProduct = cartItems.find((item) => item.slug === product.slug);
   const addToCartHandler = () => {
-    if (!checkProduct && product?.count > 0) {
-      dispatch(AddProduct({ ...product, qty: 1, count: product.count - 1 }));
+    const checkProduct = cartItems.find((item) => item.slug === product.slug);
+    if (!checkProduct && product.count > 0) {
       toast.success("Product Add To cart", {
-        position: "top-right",
+        position: "top-center",
       });
-    } else if (checkProduct && checkProduct?.count > 0) {
-      dispatch(
-        AddProduct({
-          ...product,
-          qty: checkProduct?.qty! + 1,
-          count: checkProduct.count - 1,
-        })
-      );
-      toast.success("Product Add To cart", {
-        position: "top-right",
-      });
-    } else {
+      dispatch(AddProduct(product));
+    }
+    if (!checkProduct && product.count === 0) {
       toast.error("Product Is Not Available", {
-        position: "top-right",
+        position: "top-center",
       });
+      return;
+    }
+    if (checkProduct && product.count < checkProduct?.qty) {
+      toast.error("Product Is Not Available", {
+        position: "top-center",
+      });
+      return;
+    }
+    if (checkProduct && product.count > checkProduct?.qty) {
+      toast.success("Product Add To cart", {
+        position: "top-center",
+      });
+      dispatch(AddProduct(product));
     }
   };
-  const checkDisableButton = (): boolean => {
-    if (checkProduct && checkProduct.count === 0) {
-      return true;
-    } else if (product.count === 0) {
-      return true;
-    }
-    return false;
-  };
+
   return (
     <div className="bg-white border-1 border-black shadow-sm mb-5 block overflow-hidden hover:shadow-xl hover:scale-[1.01]  p-5">
       <div className="">
@@ -73,9 +69,8 @@ const Product = ({ product }: { product: productType }) => {
         </Link>
         <p className="p-2">{commafy(product.price)}</p>
         <button
-          className="bg-green-600 text-white rounded-xl px-4 py-2 disabled:cursor-not-allowed"
+          className="bg-green-600 text-white rounded-xl px-4 py-2"
           onClick={addToCartHandler}
-          disabled={checkDisableButton()}
         >
           Add To Cart
         </button>
