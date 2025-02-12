@@ -8,6 +8,8 @@ import { AddProduct, RemoveProduct } from "../store/features/cartSlice";
 import { toast } from "react-toastify";
 import { productType } from "@/components/product/Product";
 import Summery from "@/components/summery/Summery";
+import dynamic from "next/dynamic";
+
 const Cart = () => {
   const { cartItems, totalPrice } = useAppSelector(
     (state: RootState) => state.cart
@@ -91,4 +93,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default Cart

@@ -1,12 +1,12 @@
-import Product, { productType } from "@/components/product/Product";
+import { productType } from "@/components/product/Product";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import Cookies from "js-cookie";
 type initialStateType = {
   cartItems: productType[];
   totalPrice: number;
 };
 const initialState: initialStateType = {
-  cartItems: [],
+  cartItems: Cookies.get("cart") ? JSON.parse(Cookies.get("cart")) : [],
   totalPrice: 0,
 };
 
@@ -25,7 +25,7 @@ const cartSlice = createSlice({
           product.slug === findProduct.slug ? action.payload : product
         );
       }
-
+      Cookies.set("cart", JSON.stringify(state.cartItems));
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
         return (acc = acc + cur.price * cur?.qty!);
       }, 0);
@@ -45,6 +45,8 @@ const cartSlice = createSlice({
             : product
         );
       }
+      Cookies.set("cart", JSON.stringify(state.cartItems));
+
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
         return (acc = acc + cur.price * cur.qty!);
       }, 0);
