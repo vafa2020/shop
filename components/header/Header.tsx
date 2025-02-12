@@ -8,7 +8,7 @@ const Header = () => {
   const { cartItems, totalPrice } = useAppSelector(
     (state: RootState) => state.cart
   );
-  console.log("totalPrice", totalPrice);
+  // console.log("totalPrice", totalPrice);
   console.log("cartItems", cartItems);
   return (
     <header>

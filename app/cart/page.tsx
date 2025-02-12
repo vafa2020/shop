@@ -7,6 +7,7 @@ import { BiPlus, BiMinus, BiTrash } from "react-icons/bi";
 import { AddProduct, RemoveProduct } from "../store/features/cartSlice";
 import { toast } from "react-toastify";
 import { productType } from "@/components/product/Product";
+import Summery from "@/components/summery/Summery";
 const Cart = () => {
   const { cartItems, totalPrice } = useAppSelector(
     (state: RootState) => state.cart
@@ -22,29 +23,15 @@ const Cart = () => {
   }
   const incrementHandler = (product: productType) => {
     const checkProduct = cartItems.find((item) => item.slug === product.slug);
-    if (!checkProduct && product.count > 0) {
-      toast.success("Product Add To cart", {
-        position: "top-center",
-      });
-      dispatch(AddProduct(product));
-    }
-    if (!checkProduct && product.count === 0) {
+    const qty: number = checkProduct ? checkProduct?.qty! + 1 : 1;
+    console.log("qty", qty);
+    if (product.count >= qty) {
+      dispatch(AddProduct({ ...product, qty }));
+    } else {
       toast.error("Product Is Not Available", {
         position: "top-center",
       });
       return;
-    }
-    if (checkProduct && product.count < checkProduct?.qty) {
-      toast.error("Product Is Not Available", {
-        position: "top-center",
-      });
-      return;
-    }
-    if (checkProduct && product.count > checkProduct?.qty) {
-      toast.success("Product Add To cart", {
-        position: "top-center",
-      });
-      dispatch(AddProduct(product));
     }
   };
   const decrementHandler = (id: string) => {
@@ -96,6 +83,9 @@ const Cart = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div>
+        <Summery />
       </div>
     </div>
   );

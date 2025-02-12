@@ -1,4 +1,4 @@
-import { productType } from "@/components/product/Product";
+import Product, { productType } from "@/components/product/Product";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type initialStateType = {
@@ -18,17 +18,13 @@ const cartSlice = createSlice({
       const findProduct = state.cartItems.find(
         (item) => item.slug === action.payload.slug
       );
-      const qty: number = findProduct ? findProduct?.qty! + 1 : 1;
-      state.cartItems = findProduct
-        ? state.cartItems.map((product) =>
-            product.title === findProduct.title
-              ? {
-                  ...findProduct,
-                  qty,
-                }
-              : product
-          )
-        : [...state.cartItems, { ...action.payload, qty }];
+      if (!findProduct) {
+        state.cartItems.push(action.payload);
+      } else {
+        state.cartItems = state.cartItems.map((product) =>
+          product.slug === findProduct.slug ? action.payload : product
+        );
+      }
 
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
         return (acc = acc + cur.price * cur?.qty!);

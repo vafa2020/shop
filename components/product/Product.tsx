@@ -4,6 +4,7 @@ import { AddProduct } from "@/app/store/features/cartSlice";
 import { RootState } from "@/app/store/store";
 import { commafy } from "@/utils/commafy";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -26,29 +27,19 @@ const Product = ({ product }: { product: productType }) => {
 
   const addToCartHandler = () => {
     const checkProduct = cartItems.find((item) => item.slug === product.slug);
-    if (!checkProduct && product.count > 0) {
+    const qty: number = checkProduct ? checkProduct?.qty! + 1 : 1;
+    // console.log('qty', qty)
+    if (product.count >= qty) {
+      dispatch(AddProduct({ ...product, qty }));
       toast.success("Product Add To cart", {
         position: "top-center",
       });
-      dispatch(AddProduct(product));
-    }
-    if (!checkProduct && product.count === 0) {
+      redirect("/cart");
+    } else {
       toast.error("Product Is Not Available", {
         position: "top-center",
       });
       return;
-    }
-    if (checkProduct && product.count < checkProduct?.qty) {
-      toast.error("Product Is Not Available", {
-        position: "top-center",
-      });
-      return;
-    }
-    if (checkProduct && product.count > checkProduct?.qty) {
-      toast.success("Product Add To cart", {
-        position: "top-center",
-      });
-      dispatch(AddProduct(product));
     }
   };
 
