@@ -7,15 +7,16 @@ import { BiPlus, BiMinus, BiTrash } from "react-icons/bi";
 import { AddProduct, RemoveProduct } from "../store/features/cartSlice";
 import { toast } from "react-toastify";
 import { productType } from "@/components/product/Product";
-import Summery from "@/components/summery/Summery";
 import dynamic from "next/dynamic";
+import Summery from "@/components/summery/Summery";
+
 
 const Cart = () => {
   const { cartItems, totalPrice } = useAppSelector(
     (state: RootState) => state.cart
   );
-
   const dispatch = useAppDispatch();
+
   if (cartItems.length === 0) {
     return (
       <p className="bg-red-500 animate-pulse text-white w-40 flex justify-center m-auto p-3 rounded-lg">
@@ -26,7 +27,7 @@ const Cart = () => {
   const incrementHandler = (product: productType) => {
     const checkProduct = cartItems.find((item) => item.slug === product.slug);
     const qty: number = checkProduct ? checkProduct?.qty! + 1 : 1;
-    console.log("qty", qty);
+    // console.log("qty", qty);
     if (product.count >= qty) {
       dispatch(AddProduct({ ...product, qty }));
     } else {
@@ -69,10 +70,7 @@ const Cart = () => {
                       <BiPlus />
                     </button>
                     <span>{product.qty}</span>
-                    <button
-                      className=""
-                      onClick={() => decrementHandler(product.slug)}
-                    >
+                    <button onClick={() => decrementHandler(product.slug)}>
                       {product.qty > 1 ? (
                         <BiMinus />
                       ) : (
@@ -87,10 +85,10 @@ const Cart = () => {
         </table>
       </div>
       <div>
-        <Summery />
+        <Summery cart={true} />
       </div>
     </div>
   );
 };
 
-export default Cart
+export default dynamic(() => Promise.resolve(Cart), { ssr: false });

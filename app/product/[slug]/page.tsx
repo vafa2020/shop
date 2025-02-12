@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import productsData from "../../../data/products.json";
 import { Metadata } from "next";
@@ -31,7 +29,7 @@ const ProductPage = async ({ params }: Props) => {
           <ProductDescription product={product!} />
         </div>
       </div>
-      <Summery product={product!} />
+      <Summery product={product!} cart={false} />
     </div>
   );
 };

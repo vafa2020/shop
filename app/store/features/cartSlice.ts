@@ -7,7 +7,9 @@ type initialStateType = {
 };
 const initialState: initialStateType = {
   cartItems: Cookies.get("cart") ? JSON.parse(Cookies.get("cart")) : [],
-  totalPrice: 0,
+  totalPrice: Cookies.get("totalPrice")
+    ? JSON.parse(Cookies.get("totalPrice"))
+    : 0,
 };
 
 const cartSlice = createSlice({
@@ -29,6 +31,7 @@ const cartSlice = createSlice({
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
         return (acc = acc + cur.price * cur?.qty!);
       }, 0);
+      Cookies.set("totalPrice", JSON.stringify(state.totalPrice));
     },
     RemoveProduct: (state, action: PayloadAction<string>) => {
       const checkProduct = state.cartItems.find(
@@ -50,6 +53,7 @@ const cartSlice = createSlice({
       state.totalPrice = state.cartItems.reduce((acc, cur) => {
         return (acc = acc + cur.price * cur.qty!);
       }, 0);
+      Cookies.set("totalPrice", JSON.stringify(state.totalPrice));
     },
   },
 });
